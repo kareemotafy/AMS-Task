@@ -3,7 +3,10 @@ const router = express.Router();
 
 const User = require("../models/User");
 const UserService = require("../services/user.service");
-const { successfulAuthResponse } = require("../middleware/auth-tools");
+const {
+  successfulAuthResponse,
+  validateAuth,
+} = require("../middleware/auth-tools");
 
 router.post("/register", async (req, res) => {
   try {
@@ -48,6 +51,24 @@ router.post("/signin", async (req, res) => {
     }
 
     successfulAuthResponse(res, user, "User sign in successful");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal error",
+      success: false,
+    });
+  }
+});
+
+router.get("/profile", validateAuth, async (req, res) => {
+  try {
+    const userService = new UserService({ User });
+    const user = await userService.getUserById(req.token._id);
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({
