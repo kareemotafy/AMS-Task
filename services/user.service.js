@@ -46,6 +46,11 @@ class UserService {
     }
     return user;
   }
+
+  async getUserById(_id) {
+    const { User } = this.db;
+    return await User.findById(_id);
+  }
 }
 
 module.exports = UserService;
