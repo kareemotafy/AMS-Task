@@ -1,4 +1,4 @@
-import { removeUndefinedValues } from "../middleware/utils";
+const { removeUndefinedValues } = require("../middleware/utils");
 
 class StaffService {
   constructor({ Staff }) {

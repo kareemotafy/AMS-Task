@@ -1,3 +1,5 @@
+const { removeUndefinedValues } = require("../middleware/utils");
+
 class EquipmentService {
   constructor({ Equipment }) {
     this.db = { Equipment };
