@@ -1,4 +1,5 @@
+import { Grid } from "@mui/material";
 const Home = () => {
-  return <>This is Home</>;
+  return <Grid container>This is Home</Grid>;
 };
 export default Home;

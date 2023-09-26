@@ -1,6 +1,5 @@
 import React, { Suspense, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import _ from "lodash";
 
 import "./styles/App.css";
 import "@fontsource/roboto/300.css";
@@ -14,53 +13,38 @@ import Home from "./pages/Home";
 import GeneralLoading from "./components/GeneralLoading";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import Navbar from "./components/Navbar";
 
 const ProtectedComponent = (component) => {
   const navigate = useNavigate();
   const [cookies] = useCookies([]);
-  const verifyCookie = async () => {
-    if (!cookies.token) {
-      navigate("/sign-in");
-    }
-  };
   useEffect(() => {
+    const verifyCookie = async () => {
+      if (!cookies.token) {
+        navigate("/sign-in");
+      }
+    };
     verifyCookie();
-  }, []);
+  }, [cookies, navigate]);
 
-  return <>{component}</>;
+  return (
+    <>
+      <Navbar />
+      {component}
+    </>
+  );
 };
 
 //test
 const generateRoutes = (routes) => {
-  return _.flatten(
-    routes.map(({ path, element, children, skipCookie }) => {
-      const nestedRoutes =
-        children?.length > 0
-          ? generateRoutes(children).map(
-              ({ path: nestedPath, element, skipCookie }) => {
-                return (
-                  <Route
-                    key={nestedPath}
-                    path={path + nestedPath}
-                    exact
-                    element={skipCookie ? element : ProtectedComponent(element)}
-                  />
-                );
-              }
-            )
-          : null;
-
-      return [
-        <Route
-          path={path}
-          exact
-          element={skipCookie ? element : ProtectedComponent(element)}
-          key={path}
-        />,
-        nestedRoutes?.length > 0 && nestedRoutes,
-      ];
-    })
-  );
+  return routes.map(({ path, element, skipCookie }) => (
+    <Route
+      path={path}
+      exact
+      element={skipCookie ? element : ProtectedComponent(element)}
+      key={path}
+    />
+  ));
 };
 
 const routes = [
@@ -79,7 +63,10 @@ function App() {
   return (
     <>
       <Suspense fallback={<GeneralLoading />}>
-        <Routes>{renderedRoutes}</Routes>
+        <Routes>
+          {renderedRoutes.filter((route) => !route.skipCookie)}
+          {renderedRoutes.filter((route) => route.skipCookie === true)}
+        </Routes>
       </Suspense>
     </>
   );
