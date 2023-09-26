@@ -3,9 +3,9 @@ const router = express.Router();
 
 const User = require("../models/User");
 const UserService = require("../services/user.service");
-const { createSecretToken } = require("../middleware/auth-tools");
+const { successfulAuthResponse } = require("../middleware/auth-tools");
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", async (req, res) => {
   try {
     const { email, password, firstName, lastName } = req.body;
 
@@ -18,23 +18,41 @@ router.post("/register", async (req, res, next) => {
       lastName,
       createdAt: new Date(),
     });
-    const token = createSecretToken(user._id);
 
-    res
-      .cookie("token", token, {
-        withCredentials: true,
-        httpOnly: false,
-      })
-      .status(200)
-      .json({ message: "User Register Successful.", status: true, user });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid Credentials" });
+    }
+
+    successfulAuthResponse(res, user, "User Register successful");
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: "User Register Failed.", status: false });
+    res.status(400).json({ message: "Internal Error.", status: false });
   }
 });
 
-// router.post("/signin",  );
+router.post("/signin", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-// router.post("/signout", signOutController);
+    const userService = new UserService({ User });
+    const user = await userService.login({ email, password });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    successfulAuthResponse(res, user, "User sign in successful");
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Internal error", success: false });
+  }
+});
+
+router.post("/signout", async (req, res) =>
+  res.status(200).clearCookie("token").json({ status: true })
+);
 
 module.exports = router;

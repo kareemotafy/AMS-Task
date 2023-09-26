@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+
 class UserService {
   constructor({ User }) {
     this.db = { User };
@@ -15,7 +17,7 @@ class UserService {
     const existingUser = await this.checkIfUserExists({ email });
 
     if (existingUser) {
-      throw new Error("User already exists");
+      return undefined;
     }
 
     const user = await User.create({
@@ -26,6 +28,22 @@ class UserService {
       createdAt,
     });
 
+    return user;
+  }
+
+  async login({ email, password }) {
+    const { User } = this.db;
+
+    const existingUser = await this.checkIfUserExists({ email });
+
+    if (!existingUser) {
+      return undefined;
+    }
+    const user = await User.findOne({ email }).select("+password");
+    const auth = await bcrypt.compare(password, user.password);
+    if (!auth) {
+      return undefined;
+    }
     return user;
   }
 }

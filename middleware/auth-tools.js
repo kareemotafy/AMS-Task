@@ -7,6 +7,19 @@ const createSecretToken = (id) => {
   });
 };
 
+const successfulAuthResponse = (res, user, message) => {
+  const token = createSecretToken(user._id);
+
+  res
+    .cookie("token", token, {
+      withCredentials: true,
+      httpOnly: false,
+    })
+    .status(200)
+    .json({ message, success: true });
+};
+
 module.exports = {
   createSecretToken,
+  successfulAuthResponse,
 };
