@@ -1,8 +1,8 @@
-import React, { Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { Suspense, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import _ from "lodash";
 
-import "./App.css";
+import "./styles/App.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -12,6 +12,23 @@ import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import GeneralLoading from "./components/GeneralLoading";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+
+const ProtectedComponent = (component) => {
+  const navigate = useNavigate();
+  const [cookies] = useCookies([]);
+  const verifyCookie = async () => {
+    if (!cookies.token) {
+      navigate("/sign-in");
+    }
+  };
+  useEffect(() => {
+    verifyCookie();
+  }, []);
+
+  return <>{component}</>;
+};
 
 //test
 const generateRoutes = (routes) => {
@@ -26,7 +43,7 @@ const generateRoutes = (routes) => {
                     key={nestedPath}
                     path={path + nestedPath}
                     exact
-                    element={element}
+                    element={skipCookie ? element : ProtectedComponent(element)}
                   />
                 );
               }
@@ -34,7 +51,12 @@ const generateRoutes = (routes) => {
           : null;
 
       return [
-        <Route path={path} exact element={element} key={path} />,
+        <Route
+          path={path}
+          exact
+          element={skipCookie ? element : ProtectedComponent(element)}
+          key={path}
+        />,
         nestedRoutes?.length > 0 && nestedRoutes,
       ];
     })
@@ -44,11 +66,15 @@ const generateRoutes = (routes) => {
 const routes = [
   { path: "/register", element: <Register />, skipCookie: true },
   { path: "/sign-in", element: <SignIn />, skipCookie: true },
+  { path: "*", element: <h1>404</h1>, skipCookie: true },
   { path: "/", element: <Home /> },
 ];
 
 function App() {
   const renderedRoutes = generateRoutes(routes);
+
+  axios.defaults.baseURL = "http://localhost:1337/api";
+  axios.defaults.withCredentials = true;
 
   return (
     <>

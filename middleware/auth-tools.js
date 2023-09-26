@@ -28,9 +28,9 @@ const translateCookies = (req, res, next) => {
   req.token = {};
   if (token) {
     try {
-      const token = jwt.verify(token, jwtSecretKey);
+      const verifiedToken = jwt.verify(token, jwtSecretKey);
 
-      req.token = token;
+      req.token = verifiedToken;
     } catch (error) {
       console.error(error);
       return res.status(500).json({

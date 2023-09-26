@@ -1,6 +1,90 @@
-import { Button } from "@mui/material";
+import React from "react";
+import { Button, Card, Grid, TextField } from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
+import { showSnackError } from "../tools/utils";
 
 const SignIn = () => {
-  return <>hello this is sign in</>;
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const onSubmit = async ({ email, password }) => {
+    try {
+      await axios.post("/signin", { email, password });
+
+      enqueueSnackbar("Sign in succesful!", { variant: "success" });
+      navigate("/");
+    } catch (error) {
+      showSnackError(error, "Sign in failed!", enqueueSnackbar);
+    }
+  };
+  return (
+    <>
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{
+          background: "linear-gradient(to bottom right, #001f3f, #004080)",
+          height: "100vh",
+        }}
+      >
+        <Grid item md={6} xs={9}>
+          <Card style={{ padding: 30 }}>
+            <h1>Welcome!</h1>
+            <p style={{ marginBottom: 20 }}>
+              Please enter your data to sign in
+            </p>
+
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Controller
+                    name="email"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        variant="outlined"
+                        label="Email"
+                        type="email"
+                        {...field}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Controller
+                    name="password"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        type="password"
+                        variant="outlined"
+                        label="Password"
+                        {...field}
+                      />
+                    )}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button variant="contained" type="submit">
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Card>
+        </Grid>
+      </Grid>
+    </>
+  );
 };
 export default SignIn;

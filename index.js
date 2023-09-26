@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
 const { translateCookies } = require("./middleware/auth-tools");
 
-const { MONGO_URL, PORT } = process.env;
+const { MONGO_URL, PORT, ENV } = process.env;
 
 mongoose
   .connect(MONGO_URL, {
@@ -16,6 +16,10 @@ mongoose
   })
   .then(() => console.log("Database connected successfully"))
   .catch((err) => console.error(err));
+
+if (ENV === "development") {
+  mongoose.set("debug", true);
+}
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
