@@ -5,6 +5,7 @@ const app = express();
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
+const { translateCookies } = require("./middleware/auth-tools");
 
 const { MONGO_URL, PORT } = process.env;
 
@@ -30,5 +31,7 @@ app.use(
 app.use(cookieParser());
 
 app.use(express.json());
+
+app.use(translateCookies);
 
 app.use("/", authRoute);

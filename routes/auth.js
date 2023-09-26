@@ -26,7 +26,10 @@ router.post("/register", async (req, res) => {
     successfulAuthResponse(res, user, "User Register successful");
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: "Internal Error.", status: false });
+    res.status(500).json({
+      message: "Internal Error.",
+      status: false,
+    });
   }
 });
 
@@ -47,7 +50,10 @@ router.post("/signin", async (req, res) => {
     successfulAuthResponse(res, user, "User sign in successful");
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: "Internal error", success: false });
+    res.status(500).json({
+      message: "Internal error",
+      success: false,
+    });
   }
 });
 
