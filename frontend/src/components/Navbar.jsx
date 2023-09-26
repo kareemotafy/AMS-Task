@@ -33,8 +33,9 @@ const Navbar = () => {
       await axios.post("/signout");
       enqueueSnackbar("Sign out succesful!", { variant: "success" });
       navigate("/sign-in");
-    } catch (error) {}
-    enqueueSnackbar("Sign out failed!", { variant: "success" });
+    } catch (error) {
+      enqueueSnackbar("Sign out failed!", { variant: "error" });
+    }
   };
 
   return (
