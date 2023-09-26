@@ -34,4 +34,4 @@ app.use(express.json());
 
 app.use(translateCookies);
 
-app.use("/", authRoute);
+app.use("/api", authRoute);
