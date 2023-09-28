@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 
 import { Box, Grid, Tab, Tabs } from "@mui/material";
-import EquipmentRequests from "./requests/EquipmentRequests";
-import StaffRequests from "./requests/StaffRequests";
 const Issues = () => {
   const [tabIndex, setTabIndex] = useState("equipment");
 

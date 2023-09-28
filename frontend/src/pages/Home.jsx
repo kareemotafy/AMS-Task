@@ -9,7 +9,7 @@ const Home = () => {
   const [tabIndex, setTabIndex] = useState("equipment");
   const getUserData = async () => {
     try {
-      const { data } = await axios.get("/profile");
+      const { data } = await axios.get("/user");
 
       setUser(data.user);
     } catch (error) {

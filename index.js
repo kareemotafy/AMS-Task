@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
 const equipmentRoute = require("./routes/equipment");
 const staffRoute = require("./routes/staff");
+const userRoute = require("./routes/user");
 const { translateCookies } = require("./middleware/auth-tools");
 
 const { MONGO_URL, PORT, ENV } = process.env;
@@ -43,3 +44,4 @@ app.use(translateCookies);
 app.use("/api", authRoute);
 app.use("/api/equipment", equipmentRoute);
 app.use("/api/staff", staffRoute);
+app.use("/api/user", userRoute);

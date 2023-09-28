@@ -51,6 +51,27 @@ class UserService {
     const { User } = this.db;
     return await User.findById(_id);
   }
+  async getUsers() {
+    const { User } = this.db;
+    return await User.find({});
+  }
+
+  async updateUser({ _id, firstName, lastName }) {
+    const { User } = this.db;
+    return await User.findByIdAndUpdate(
+      _id,
+      {
+        firstName,
+        lastName,
+      },
+      { new: true }
+    );
+  }
+  async deleteUser(_id) {
+    const { User } = this.db;
+
+    return await User.findByIdAndDelete(_id);
+  }
 }
 
 module.exports = UserService;

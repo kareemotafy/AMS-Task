@@ -60,24 +60,6 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get("/profile", validateAuth, async (req, res) => {
-  try {
-    const userService = new UserService({ User });
-    const user = await userService.getUserById(req.token._id);
-
-    res.status(200).json({
-      success: true,
-      user,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "Internal error",
-      success: false,
-    });
-  }
-});
-
 router.post("/signout", async (req, res) =>
   res.status(200).clearCookie("token").json({ status: true })
 );
