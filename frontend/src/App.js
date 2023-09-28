@@ -16,6 +16,8 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import Navbar from "./components/Navbar";
 import Equipment from "./pages/Equipment";
+import Issues from "./pages/Issues";
+import Users from "./pages/Users";
 
 const ProtectedComponent = (component) => {
   const navigate = useNavigate();
@@ -58,6 +60,8 @@ const routes = [
   { path: "/", element: <Home /> },
   { path: "/staff", element: <Staff /> },
   { path: "/equipment", element: <Equipment /> },
+  { path: "/issues", element: <Issues /> },
+  { path: "/users", element: <Users /> },
 ];
 
 function App() {
