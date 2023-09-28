@@ -20,12 +20,12 @@ router.get("/", validateAuth, async (req, res) => {
 });
 
 router.post("/", validateAuth, async (req, res) => {
-  const { name, description, active, title } = req.body;
+  const { type, description, active, title } = req.body;
 
   try {
     const equipmentService = new EquipmentService({ Equipment });
     const equipment = await equipmentService.createEquipment({
-      name,
+      type,
       description,
       active,
       title,
@@ -39,14 +39,14 @@ router.post("/", validateAuth, async (req, res) => {
 });
 
 router.patch("/:id", validateAuth, async (req, res) => {
-  const { name, description, active, title } = req.body;
+  const { type, description, active, title } = req.body;
   const { id } = req.params;
 
   try {
     const equipmentService = new EquipmentService({ Equipment });
     const equipment = await equipmentService.updateEquipment({
-      _id,
-      name,
+      _id: id,
+      type,
       description,
       active,
       title,

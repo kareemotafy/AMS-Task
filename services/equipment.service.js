@@ -10,10 +10,10 @@ class EquipmentService {
     return await Equipment.find(removeUndefinedValues({ active }));
   }
 
-  async createEquipment({ name, description, active, title }) {
+  async createEquipment({ type, description, active, title }) {
     const { Equipment } = this.db;
     const equipment = await Equipment.create({
-      name,
+      type,
       description,
       active,
       title,
@@ -21,11 +21,11 @@ class EquipmentService {
     return equipment;
   }
 
-  async updateEquipment({ _id, name, description, active, title }) {
+  async updateEquipment({ _id, type, description, active, title }) {
     const { Equipment } = this.db;
     return await Equipment.findByIdAndUpdate(
       _id,
-      removeUndefinedValues({ name, description, active, title }),
+      { $set: removeUndefinedValues({ type, description, active, title }) },
       { new: true }
     );
   }

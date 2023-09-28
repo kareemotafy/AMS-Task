@@ -15,6 +15,7 @@ import GeneralLoading from "./components/GeneralLoading";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import Navbar from "./components/Navbar";
+import Equipment from "./pages/Equipment";
 
 const ProtectedComponent = (component) => {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const routes = [
   { path: "*", element: <h1>404</h1>, skipCookie: true },
   { path: "/", element: <Home /> },
   { path: "/staff", element: <Staff /> },
+  { path: "/equipment", element: <Equipment /> },
 ];
 
 function App() {

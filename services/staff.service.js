@@ -25,7 +25,7 @@ class StaffService {
     const { Staff } = this.db;
     return await Staff.findByIdAndUpdate(
       _id,
-      removeUndefinedValues({ type, description, active, fullName }),
+      { $set: removeUndefinedValues({ type, description, active, fullName }) },
       { new: true }
     );
   }
