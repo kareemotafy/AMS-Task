@@ -106,8 +106,13 @@ const Navbar = () => {
             { text: "Issues", path: "/issues", Icon: ErrorOutlineIcon },
             { text: "Users", path: "/users", Icon: PersonIcon },
           ].map(({ text, path, Icon }) => (
-            <ListItem key={text} onClick={() => navigate(path)}>
-              <ListItemButton onClick={() => navigate(path)}>
+            <ListItem key={text}>
+              <ListItemButton
+                onClick={() => {
+                  navigate(path);
+                  setShowDrawer(false);
+                }}
+              >
                 <ListItemIcon>
                   <Icon style={{ color: "white" }} />
                 </ListItemIcon>

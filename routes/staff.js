@@ -20,12 +20,12 @@ router.get("/", validateAuth, async (req, res) => {
 });
 
 router.post("/", validateAuth, async (req, res) => {
-  const { name, description, active, fullName } = req.body;
+  const { type, description, active, fullName } = req.body;
 
   try {
     const staffService = new StaffService({ Staff });
     const staff = await staffService.createStaff({
-      name,
+      type,
       description,
       active,
       fullName,

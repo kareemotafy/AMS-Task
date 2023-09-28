@@ -9,6 +9,7 @@ import "@fontsource/roboto/700.css";
 
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
+import Staff from "./pages/Staff";
 import Home from "./pages/Home";
 import GeneralLoading from "./components/GeneralLoading";
 import axios from "axios";
@@ -52,6 +53,7 @@ const routes = [
   { path: "/sign-in", element: <SignIn />, skipCookie: true },
   { path: "*", element: <h1>404</h1>, skipCookie: true },
   { path: "/", element: <Home /> },
+  { path: "/staff", element: <Staff /> },
 ];
 
 function App() {

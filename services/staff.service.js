@@ -10,10 +10,10 @@ class StaffService {
     return await Staff.find(removeUndefinedValues({ active }));
   }
 
-  async createStaff({ name, description, active, fullName }) {
+  async createStaff({ type, description, active, fullName }) {
     const { Staff } = this.db;
     const staff = await Staff.create({
-      name,
+      type,
       description,
       active,
       fullName,
@@ -21,11 +21,11 @@ class StaffService {
     return staff;
   }
 
-  async updateStaff({ _id, name, description, active, fullName }) {
+  async updateStaff({ _id, type, description, active, fullName }) {
     const { Staff } = this.db;
     return await Staff.findByIdAndUpdate(
       _id,
-      removeUndefinedValues({ name, description, active, fullName }),
+      removeUndefinedValues({ type, description, active, fullName }),
       { new: true }
     );
   }

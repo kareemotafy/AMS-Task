@@ -54,8 +54,8 @@ const Register = () => {
                     render={({ field }) => (
                       <TextField
                         fullWidth
-                        variant="outlined"
                         label="First Name"
+                        variant="filled"
                         {...field}
                       />
                     )}
@@ -68,8 +68,8 @@ const Register = () => {
                     render={({ field }) => (
                       <TextField
                         fullWidth
-                        variant="outlined"
                         label="Last Name"
+                        variant="filled"
                         {...field}
                       />
                     )}
@@ -82,9 +82,9 @@ const Register = () => {
                     render={({ field }) => (
                       <TextField
                         fullWidth
-                        variant="outlined"
                         label="Email"
                         type="email"
+                        variant="filled"
                         {...field}
                       />
                     )}
@@ -98,8 +98,8 @@ const Register = () => {
                       <TextField
                         fullWidth
                         type="password"
-                        variant="outlined"
                         label="Password"
+                        variant="filled"
                         {...field}
                       />
                     )}

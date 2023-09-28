@@ -51,9 +51,9 @@ const SignIn = () => {
                     control={control}
                     render={({ field }) => (
                       <TextField
-                        variant="outlined"
                         label="Email"
                         type="email"
+                        variant="filled"
                         {...field}
                       />
                     )}
@@ -66,8 +66,8 @@ const SignIn = () => {
                     render={({ field }) => (
                       <TextField
                         type="password"
-                        variant="outlined"
                         label="Password"
+                        variant="filled"
                         {...field}
                       />
                     )}
