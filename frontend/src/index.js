@@ -10,16 +10,14 @@ import Modal from "./components/Modal";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <ModalProvider>
-      <SnackbarProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </SnackbarProvider>
-      <Modal />
-    </ModalProvider>
-  </React.StrictMode>
+  <ModalProvider>
+    <SnackbarProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </SnackbarProvider>
+    <Modal />
+  </ModalProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

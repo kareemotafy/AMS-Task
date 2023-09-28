@@ -31,19 +31,22 @@ const Staff = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [staff, setStaff] = useState([]);
-  const [defaultValues, setDefaultValues] = useState({
-    fullName: "",
-    type: "",
-    description: "",
-    active: false,
-  });
   const { openModal } = useModal();
-  const { control, handleSubmit, reset } = useForm({
-    defaultValues,
+  const { control, handleSubmit, reset, setValue } = useForm({
+    defaultValues: {
+      fullName: "",
+      type: "",
+      description: "",
+      active: false,
+    },
   });
 
-  const onSubmit = async (data) => {
+  const onCreateSubmit = async (data) => {
     createStaff(data);
+    reset();
+  };
+  const onUpdateSubmit = async (data) => {
+    updateStaff(data);
     reset();
   };
 
@@ -57,10 +60,22 @@ const Staff = () => {
   const createStaff = async (data) => {
     try {
       const {
-        data: { staff },
+        data: { success },
       } = await axios.post("/staff", data);
       getStaff();
-      enqueueSnackbar("Staff Created", { variant: "success" });
+      success && enqueueSnackbar("Staff Created", { variant: "success" });
+    } catch (error) {
+      showSnackError(error, "Error Creating Staff", enqueueSnackbar);
+    }
+  };
+
+  const updateStaff = async (data) => {
+    try {
+      const {
+        data: { success },
+      } = await axios.patch(`/staff/${data._id}`, data);
+      getStaff();
+      success && enqueueSnackbar("Staff Updated", { variant: "success" });
     } catch (error) {
       showSnackError(error, "Error Creating Staff", enqueueSnackbar);
     }
@@ -68,20 +83,30 @@ const Staff = () => {
 
   const deleteStaff = async (_id) => {
     try {
-      await axios.delete(`/staff/${_id}`);
+      const {
+        data: { success },
+      } = await axios.delete(`/staff/${_id}`);
       getStaff();
-      enqueueSnackbar("Staff Deleted", { variant: "success" });
+      success && enqueueSnackbar("Staff Deleted", { variant: "success" });
     } catch (error) {
       showSnackError(error, "Error Deleting Staff", enqueueSnackbar);
     }
   };
 
-  const openAddOrEditStaffModal = () => {
+  const openAddOrEditStaffModal = (staff) => {
+    const isEdit = !!staff;
+
+    if (!isEdit) {
+      reset();
+    }
+
     openModal((closeModal) => ({
-      title: "Add Staff",
+      title: `${isEdit ? "Edit" : "Add"} Staff`,
       body: (
         <>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={handleSubmit(isEdit ? onUpdateSubmit : onCreateSubmit)}
+          >
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Controller
@@ -131,13 +156,15 @@ const Staff = () => {
                 <Controller
                   name="active"
                   control={control}
-                  defaultValue={false}
-                  render={({ field }) => (
-                    <FormControlLabel
-                      control={<Checkbox {...field} />}
-                      label="Active"
-                    />
-                  )}
+                  render={({ field }) => {
+                    console.log(field);
+                    return (
+                      <FormControlLabel
+                        control={<Checkbox {...field} checked={field.value} />}
+                        label="Active"
+                      />
+                    );
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -225,7 +252,7 @@ const Staff = () => {
         <h1>Staff</h1>
       </Grid>
       <Grid item xs={12} container justifyContent="right">
-        <Button variant="outlined" onClick={openAddOrEditStaffModal}>
+        <Button variant="contained" onClick={() => openAddOrEditStaffModal()}>
           Add
         </Button>
       </Grid>
@@ -238,7 +265,6 @@ const Staff = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Type</TableCell>
                 <TableCell>Active</TableCell>
-                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -254,7 +280,7 @@ const Staff = () => {
                   <TableCell>
                     {staff.active ? <CheckCircle /> : <Cancel />}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="right">
                     <IconButton
                       onClick={() => {
                         openViewStaffModal(staff);
@@ -262,7 +288,17 @@ const Staff = () => {
                     >
                       <Visibility />
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                      onClick={() => {
+                        setValue("fullName", staff.fullName);
+                        setValue("type", staff.type);
+                        setValue("description", staff.description);
+                        setValue("active", staff.active);
+                        setValue("_id", staff._id);
+
+                        openAddOrEditStaffModal(staff);
+                      }}
+                    >
                       <Edit />
                     </IconButton>
                     <IconButton
