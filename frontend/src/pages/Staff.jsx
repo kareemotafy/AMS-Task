@@ -156,15 +156,12 @@ const Staff = () => {
                 <Controller
                   name="active"
                   control={control}
-                  render={({ field }) => {
-                    console.log(field);
-                    return (
-                      <FormControlLabel
-                        control={<Checkbox {...field} checked={field.value} />}
-                        label="Active"
-                      />
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      control={<Checkbox {...field} checked={field.value} />}
+                      label="Active"
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12}>
