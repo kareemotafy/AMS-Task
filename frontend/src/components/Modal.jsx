@@ -4,7 +4,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
   IconButton,
 } from "@mui/material";
 import { useModal } from "../contexts/ModalContext";
