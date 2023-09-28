@@ -262,6 +262,7 @@ const Staff = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Type</TableCell>
                 <TableCell>Active</TableCell>
+                <TableCell>Created At</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -277,6 +278,7 @@ const Staff = () => {
                   <TableCell>
                     {staff.active ? <CheckCircle /> : <Cancel />}
                   </TableCell>
+                  <TableCell>{staff.createdAt.split("T")[0]}</TableCell>
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {

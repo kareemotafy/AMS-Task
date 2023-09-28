@@ -38,8 +38,9 @@ router.post("/", validateAuth, async (req, res) => {
   }
 });
 
-router.patch("/", validateAuth, async (req, res) => {
-  const { _id, name, description, active, title } = req.body;
+router.patch("/:id", validateAuth, async (req, res) => {
+  const { name, description, active, title } = req.body;
+  const { id } = req.params;
 
   try {
     const equipmentService = new EquipmentService({ Equipment });
@@ -58,12 +59,12 @@ router.patch("/", validateAuth, async (req, res) => {
   }
 });
 
-router.delete("/", validateAuth, async (req, res) => {
-  const { _id } = req.body;
+router.delete("/:id", validateAuth, async (req, res) => {
+  const { id } = req.params;
 
   try {
     const equipmentService = new EquipmentService({ Equipment });
-    const equipment = await equipmentService.deleteEquipment({ _id });
+    const equipment = await equipmentService.deleteEquipment({ id });
 
     res.status(200).json({ equipment, success: true });
   } catch (error) {
