@@ -31,7 +31,7 @@ const ProtectedComponent = (component) => {
   return (
     <>
       <Navbar />
-      {component}
+      <div style={{ marginRight: 50, marginLeft: 50 }}>{component}</div>
     </>
   );
 };

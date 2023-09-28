@@ -38,13 +38,14 @@ router.post("/", validateAuth, async (req, res) => {
   }
 });
 
-router.patch("/", validateAuth, async (req, res) => {
-  const { _id, name, description, active, fullName } = req.body;
+router.patch("/:id", validateAuth, async (req, res) => {
+  const { name, description, active, fullName } = req.body;
+  const { id } = req.params;
 
   try {
     const staffService = new StaffService({ Staff });
     const staff = await staffService.updateStaff({
-      _id,
+      _id: id,
       name,
       description,
       active,
@@ -58,12 +59,12 @@ router.patch("/", validateAuth, async (req, res) => {
   }
 });
 
-router.delete("/", validateAuth, async (req, res) => {
-  const { _id } = req.body;
+router.delete("/:id", validateAuth, async (req, res) => {
+  const { id } = req.params;
 
   try {
     const staffService = new StaffService({ Staff });
-    const staff = await staffService.deleteStaff({ _id });
+    const staff = await staffService.deleteStaff({ _id: id });
 
     res.status(200).json({ staff, success: true });
   } catch (error) {
