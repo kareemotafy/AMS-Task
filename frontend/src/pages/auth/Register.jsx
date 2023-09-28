@@ -4,25 +4,27 @@ import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { showSnackError } from "../tools/utils";
+import { showSnackError } from "../../tools/utils";
 
-const SignIn = () => {
+const Register = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm({
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     },
   });
-  const onSubmit = async ({ email, password }) => {
+  const onSubmit = async ({ email, password, lastName, firstName }) => {
     try {
-      await axios.post("/signin", { email, password });
+      await axios.post("/register", { email, password, lastName, firstName });
 
-      enqueueSnackbar("Sign in succesful!", { variant: "success" });
+      enqueueSnackbar("Register succesful!", { variant: "success" });
       navigate("/");
     } catch (error) {
-      showSnackError(error, "Sign in failed!", enqueueSnackbar);
+      showSnackError(error, "Register failed!", enqueueSnackbar);
     }
   };
   return (
@@ -36,21 +38,50 @@ const SignIn = () => {
           height: "100vh",
         }}
       >
-        <Grid item md={6} xs={9}>
+        <Grid item md={6} xs={10}>
           <Card style={{ padding: 30 }}>
             <h1>Welcome!</h1>
             <p style={{ marginBottom: 20 }}>
-              Please enter your data to sign in
+              Please enter your data to register!
             </p>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Controller
+                    name="firstName"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        fullWidth
+                        label="First Name"
+                        variant="filled"
+                        {...field}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Controller
+                    name="lastName"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        fullWidth
+                        label="Last Name"
+                        variant="filled"
+                        {...field}
+                      />
+                    )}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <Controller
                     name="email"
                     control={control}
                     render={({ field }) => (
                       <TextField
+                        fullWidth
                         label="Email"
                         type="email"
                         variant="filled"
@@ -65,6 +96,7 @@ const SignIn = () => {
                     control={control}
                     render={({ field }) => (
                       <TextField
+                        fullWidth
                         type="password"
                         label="Password"
                         variant="filled"
@@ -87,4 +119,4 @@ const SignIn = () => {
     </>
   );
 };
-export default SignIn;
+export default Register;

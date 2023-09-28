@@ -7,8 +7,8 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import SignIn from "./pages/SignIn";
-import Register from "./pages/Register";
+import SignIn from "./pages/auth/SignIn";
+import Register from "./pages/auth/Register";
 import Staff from "./pages/Staff";
 import Home from "./pages/Home";
 import GeneralLoading from "./components/GeneralLoading";
@@ -32,7 +32,9 @@ const ProtectedComponent = (component) => {
   return (
     <>
       <Navbar />
-      <div style={{ marginRight: 50, marginLeft: 50 }}>{component}</div>
+      <div style={{ marginRight: 50, marginLeft: 50, marginTop: 20 }}>
+        {component}
+      </div>
     </>
   );
 };
