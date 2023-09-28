@@ -212,7 +212,7 @@ const Staff = () => {
       body: (
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <h3 style={{ color: "red", fontWeight: 400 }}>
+            <h3 style={{ color: "red", fontWeight: 300 }}>
               Are you sure you want to delete this staff member?
             </h3>
           </Grid>
@@ -245,13 +245,18 @@ const Staff = () => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid item xs={8}>
         <h1>Staff</h1>
+        <h4 style={{ color: "#0000CD", fontWeight: 300, marginBottom: 40 }}>
+          A list of your staff where you can view, add, edit, or delete.
+        </h4>
       </Grid>
-      <Grid item xs={12} container justifyContent="right">
-        <Button variant="contained" onClick={() => openAddOrEditStaffModal()}>
-          Add
-        </Button>
+      <Grid item xs={4} container justifyContent="right" alignItems="center">
+        <div>
+          <Button variant="contained" onClick={() => openAddOrEditStaffModal()}>
+            Add
+          </Button>
+        </div>
       </Grid>
 
       <Grid item xs={12}>
