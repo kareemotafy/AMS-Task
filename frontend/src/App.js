@@ -21,14 +21,18 @@ import { getCookie } from "./tools/utils";
 
 const CookiefullComponent = (component) => {
   const navigate = useNavigate();
+
+  const cookie = getCookie("token");
+
   useEffect(() => {
     const verifyCookie = async () => {
-      if (!getCookie("token")) {
+      if (!cookie) {
         navigate("/sign-in");
       }
     };
+
     verifyCookie();
-  }, [navigate]);
+  }, [cookie, navigate]);
 
   return (
     <>
@@ -40,29 +44,13 @@ const CookiefullComponent = (component) => {
   );
 };
 
-const CookieLessComponent = (component) => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const verifyCookie = async () => {
-      if (getCookie("token")) {
-        navigate("/");
-      }
-    };
-    verifyCookie();
-  }, [navigate]);
-
-  return <>{component}</>;
-};
-
 //test
 const generateRoutes = (routes) => {
   return routes.map(({ path, element, skipCookie }) => (
     <Route
       path={path}
       exact
-      element={
-        skipCookie ? CookieLessComponent(element) : CookiefullComponent(element)
-      }
+      element={skipCookie ? element : CookiefullComponent(element)}
       key={path}
     />
   ));
