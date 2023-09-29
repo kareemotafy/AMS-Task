@@ -13,4 +13,7 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
-export { showSnackError, getCookie };
+const mergeDateAndTime = (date, time) => {
+  return new Date(`${date}T${time}`);
+};
+export { showSnackError, getCookie, mergeDateAndTime };
