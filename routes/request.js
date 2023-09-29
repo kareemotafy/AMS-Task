@@ -5,6 +5,8 @@ const { parseISO } = require("date-fns");
 const { validateAuth } = require("../middleware/auth-tools");
 const EquipmentRequestService = require("../services/equipment-request.service");
 const EquipmentRequest = require("../models/EquipmentRequest");
+const StaffRequest = require("../models/StaffRequest");
+const StaffRequestService = require("../services/staff-request.service");
 
 router.get("/equipment", validateAuth, async (req, res) => {
   const { active } = req.query;
@@ -67,6 +69,72 @@ router.patch("/equipment/:id", validateAuth, async (req, res) => {
       });
 
     res.status(200).json({ equipmentRequest, success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal error", success: false });
+  }
+});
+
+router.get("/staff", validateAuth, async (req, res) => {
+  const { active } = req.query;
+  const staffRequestService = new StaffRequestService({
+    StaffRequest,
+  });
+
+  try {
+    const staffRequests = await staffRequestService.getStaffRequests({
+      active,
+    });
+
+    res.status(200).json({ staffRequests, success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal error", success: false });
+  }
+});
+
+router.post("/staff", validateAuth, async (req, res) => {
+  let { resource, due, usageDuration, purpose } = req.body;
+
+  due = parseISO(due);
+
+  try {
+    const staffRequestService = new StaffRequestService({
+      StaffRequest,
+    });
+    const staffRequest = await staffRequestService.createStaffRequest({
+      resource,
+      due,
+      usageDuration,
+      createdBy: req.token._id,
+      purpose,
+    });
+
+    if (!staffRequest) {
+      return res
+        .status(400)
+        .json({ message: "Staff is not available", success: false });
+    }
+
+    res.status(200).json({ staffRequest, success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal error", success: false });
+  }
+});
+router.patch("/staff/:id", validateAuth, async (req, res) => {
+  let { id } = req.params;
+
+  try {
+    const staffRequestService = new StaffRequestService({
+      StaffRequest,
+    });
+    const staffRequest = await staffRequestService.confirmRequestIsComplete({
+      _id: id,
+      completedBy: req.token._id,
+    });
+
+    res.status(200).json({ staffRequest, success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal error", success: false });
