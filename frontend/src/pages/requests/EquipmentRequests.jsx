@@ -267,8 +267,12 @@ const EquipmentRequests = () => {
                         <h4 style={{ marginTop: 10 }}>Usage Duration:</h4>
                         <p>{usageDuration} minutes</p>
 
-                        <h4 style={{ marginTop: 10 }}>Purpose:</h4>
-                        <p>{purpose}</p>
+                        {purpose && (
+                          <>
+                            <h4 style={{ marginTop: 10 }}>Purpose:</h4>
+                            <p>{purpose}</p>
+                          </>
+                        )}
                       </Grid>
                       <Grid item xs={6}>
                         <h4>Requested By:</h4>
