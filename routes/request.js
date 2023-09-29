@@ -53,5 +53,24 @@ router.post("/equipment", validateAuth, async (req, res) => {
     res.status(500).json({ message: "Internal error", success: false });
   }
 });
+router.patch("/equipment/:id", validateAuth, async (req, res) => {
+  let { id } = req.params;
+
+  try {
+    const equipmentRequestService = new EquipmentRequestService({
+      EquipmentRequest,
+    });
+    const equipmentRequest =
+      await equipmentRequestService.confirmRequestIsComplete({
+        _id: id,
+        completedBy: req.token._id,
+      });
+
+    res.status(200).json({ equipmentRequest, success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal error", success: false });
+  }
+});
 
 module.exports = router;

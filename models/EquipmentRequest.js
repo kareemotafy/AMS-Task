@@ -4,7 +4,7 @@ const equipmentRequestSchema = new mongoose.Schema(
   {
     resource: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Resource",
+      ref: "Equipment",
     },
     due: Date,
     usageDuration: Number, // minutes

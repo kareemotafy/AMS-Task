@@ -1,5 +1,5 @@
 const { addMinutes } = require("date-fns");
-
+const { removeUndefinedValues } = require("../middleware/utils");
 class EquipmentRequestService {
   constructor({ EquipmentRequest }) {
     this.db = { EquipmentRequest };
@@ -7,7 +7,9 @@ class EquipmentRequestService {
 
   async getEquipmentRequests({ active }) {
     const { EquipmentRequest } = this.db;
-    return await EquipmentRequest.find(removeUndefinedValues({ active }));
+    return await EquipmentRequest.find(
+      removeUndefinedValues({ active })
+    ).populate("resource createdBy completedBy");
   }
 
   async validateResourceAvailability({ resource, due, usageEnd }) {
@@ -75,6 +77,16 @@ class EquipmentRequestService {
       createdBy,
       purpose,
     });
+  }
+
+  async confirmRequestIsComplete({ _id, completedBy }) {
+    const { EquipmentRequest } = this.db;
+
+    return await EquipmentRequest.findOneAndUpdate(
+      { _id },
+      { completed: true, completedBy, completedAt: new Date() },
+      { new: true }
+    );
   }
 }
 
