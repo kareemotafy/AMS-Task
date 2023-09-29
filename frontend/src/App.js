@@ -13,23 +13,22 @@ import Staff from "./pages/Staff";
 import Home from "./pages/Home";
 import GeneralLoading from "./components/GeneralLoading";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import Navbar from "./components/Navbar";
 import Equipment from "./pages/Equipment";
 import Issues from "./pages/Issues";
 import Users from "./pages/Users";
+import { getCookie } from "./tools/utils";
 
-const ProtectedComponent = (component) => {
+const CookiefullComponent = (component) => {
   const navigate = useNavigate();
-  const [cookies] = useCookies([]);
   useEffect(() => {
     const verifyCookie = async () => {
-      if (!cookies.token) {
+      if (!getCookie("token")) {
         navigate("/sign-in");
       }
     };
     verifyCookie();
-  }, [cookies, navigate]);
+  }, [navigate]);
 
   return (
     <>
@@ -41,13 +40,29 @@ const ProtectedComponent = (component) => {
   );
 };
 
+const CookieLessComponent = (component) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const verifyCookie = async () => {
+      if (getCookie("token")) {
+        navigate("/");
+      }
+    };
+    verifyCookie();
+  }, [navigate]);
+
+  return <>{component}</>;
+};
+
 //test
 const generateRoutes = (routes) => {
   return routes.map(({ path, element, skipCookie }) => (
     <Route
       path={path}
       exact
-      element={skipCookie ? element : ProtectedComponent(element)}
+      element={
+        skipCookie ? CookieLessComponent(element) : CookiefullComponent(element)
+      }
       key={path}
     />
   ));
