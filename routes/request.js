@@ -9,14 +9,13 @@ const StaffRequest = require("../models/StaffRequest");
 const StaffRequestService = require("../services/staff-request.service");
 
 router.get("/equipment", validateAuth, async (req, res) => {
-  const { active } = req.query;
   const equipmentRequestService = new EquipmentRequestService({
     EquipmentRequest,
   });
 
   try {
     const equipmentRequests =
-      await equipmentRequestService.getEquipmentRequests({ active });
+      await equipmentRequestService.getEquipmentRequests();
 
     res.status(200).json({ equipmentRequests, success: true });
   } catch (error) {
@@ -76,15 +75,12 @@ router.patch("/equipment/:id", validateAuth, async (req, res) => {
 });
 
 router.get("/staff", validateAuth, async (req, res) => {
-  const { active } = req.query;
   const staffRequestService = new StaffRequestService({
     StaffRequest,
   });
 
   try {
-    const staffRequests = await staffRequestService.getStaffRequests({
-      active,
-    });
+    const staffRequests = await staffRequestService.getStaffRequests();
 
     res.status(200).json({ staffRequests, success: true });
   } catch (error) {

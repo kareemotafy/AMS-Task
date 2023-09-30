@@ -5,9 +5,9 @@ class StaffRequestService {
     this.db = { StaffRequest };
   }
 
-  async getStaffRequests({ active }) {
+  async getStaffRequests() {
     const { StaffRequest } = this.db;
-    return await StaffRequest.find(removeUndefinedValues({ active })).populate(
+    return await StaffRequest.find({}).populate(
       "resource createdBy completedBy"
     );
   }

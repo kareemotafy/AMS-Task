@@ -9,6 +9,7 @@ const equipmentRoute = require("./routes/equipment");
 const staffRoute = require("./routes/staff");
 const userRoute = require("./routes/user");
 const requestRoute = require("./routes/request");
+const issueRoute = require("./routes/issue");
 const { translateCookies } = require("./middleware/auth-tools");
 
 const { MONGO_URL, PORT, ENV } = process.env;
@@ -47,3 +48,4 @@ app.use("/api/equipment", equipmentRoute);
 app.use("/api/staff", staffRoute);
 app.use("/api/user", userRoute);
 app.use("/api/request", requestRoute);
+app.use("/api/issue", issueRoute);

@@ -5,11 +5,11 @@ class EquipmentRequestService {
     this.db = { EquipmentRequest };
   }
 
-  async getEquipmentRequests({ active }) {
+  async getEquipmentRequests() {
     const { EquipmentRequest } = this.db;
-    return await EquipmentRequest.find(
-      removeUndefinedValues({ active })
-    ).populate("resource createdBy completedBy");
+    return await EquipmentRequest.find({}).populate(
+      "resource createdBy completedBy"
+    );
   }
 
   async validateResourceAvailability({ resource, due, usageEnd }) {
