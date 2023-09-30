@@ -5,7 +5,9 @@ class StaffIssueService {
 
   async getStaffIssues() {
     const { StaffIssue } = this.db;
-    return await StaffIssue.find({}).populate("resource createdBy completedBy");
+    return await StaffIssue.find({})
+      .populate("resource createdBy resolvedBy")
+      .lean();
   }
 
   async createStaffIssue({ description, createdBy, resource }) {
@@ -28,3 +30,4 @@ class StaffIssueService {
     );
   }
 }
+module.exports = StaffIssueService;

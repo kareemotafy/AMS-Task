@@ -17,3 +17,6 @@ p {
 .blue-shadow:hover {
   box-shadow: 0 0 15px rgba(20, 152, 175, 0.8);
 }
+.red-shadow:hover {
+  box-shadow: 0 0 15px rgba(143, 2, 2, 0.8);
+}

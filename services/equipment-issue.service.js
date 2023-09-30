@@ -5,12 +5,12 @@ class EquipmentIssueService {
 
   async getEquipmentIssues() {
     const { EquipmentIssue } = this.db;
-    return await EquipmentIssue.find({}).populate(
-      "resource createdBy completedBy"
-    );
+    return await EquipmentIssue.find({})
+      .populate("resource createdBy resolvedBy")
+      .lean();
   }
 
-  async createStaffIssue({ description, createdBy, resource }) {
+  async createEquipmentIssue({ description, createdBy, resource }) {
     const { EquipmentIssue } = this.db;
 
     return await EquipmentIssue.create({
@@ -30,3 +30,4 @@ class EquipmentIssueService {
     );
   }
 }
+module.exports = EquipmentIssueService;

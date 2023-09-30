@@ -3,51 +3,77 @@ const router = express.Router();
 const { parseISO } = require("date-fns");
 
 const { validateAuth } = require("../middleware/auth-tools");
-const EquipmentIssueService = require("../services/equipment-request.service");
+const EquipmentIssueService = require("../services/equipment-issue.service");
 const EquipmentIssue = require("../models/EquipmentIssue");
 const StaffIssue = require("../models/StaffIssue");
-const StaffIssueService = require("../services/staff-request.service");
+const StaffIssueService = require("../services/staff-issue.service");
 
-router.get("/equipment", validateAuth, async (req, res) => {
+router.get("/", validateAuth, async (req, res) => {
   const equipmentIssueService = new EquipmentIssueService({
     EquipmentIssue,
+  });
+
+  const staffIssueService = new StaffIssueService({
+    StaffIssue,
   });
 
   try {
     const equipmentIssues = await equipmentIssueService.getEquipmentIssues();
 
-    res.status(200).json({ equipmentIssues, success: true });
+    const staffIssues = await staffIssueService.getStaffIssues();
+
+    res.status(200).json({
+      issues: [
+        ...staffIssues.map((e) => ({ ...e, type: "staff" })),
+        ...equipmentIssues.map((e) => ({ ...e, type: "equipment" })),
+      ].sort((a, b) => a.createdAt - b.createdAt),
+      success: true,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal error", success: false });
   }
 });
 
-router.post("/equipment", validateAuth, async (req, res) => {
-  let { resource, description } = req.body;
+router.post("/", validateAuth, async (req, res) => {
+  let { resource, description, type } = req.body;
+
+  let issue;
 
   try {
-    const equipmentIssueService = new EquipmentIssueService({
-      EquipmentIssue,
-    });
-    const equipmentIssue = await equipmentIssueService.createEquipmentIssue({
-      resource,
-      createdBy: req.token._id,
-      description,
-    });
+    if (type === "equipment") {
+      const equipmentIssueService = new EquipmentIssueService({
+        EquipmentIssue,
+      });
+      issue = await equipmentIssueService.createEquipmentIssue({
+        resource,
+        createdBy: req.token._id,
+        description,
+      });
+    } else if (type === "staff") {
+      const staffIssueService = new StaffIssueService({
+        StaffIssue,
+      });
+      issue = await staffIssueService.createStaffIssue({
+        resource,
+        createdBy: req.token._id,
+        description,
+      });
+    }
 
-    if (!equipmentIssue) {
+    if (!issue) {
       return res
         .status(400)
         .json({ message: "Unable to create issue", success: false });
     }
 
-    res.status(200).json({ equipmentIssue, success: true });
+    res.status(200).json({ issue, success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal error", success: false });
   }
 });
+
 router.patch("/equipment/:id", validateAuth, async (req, res) => {
   let { id } = req.params;
 
@@ -61,47 +87,6 @@ router.patch("/equipment/:id", validateAuth, async (req, res) => {
     });
 
     res.status(200).json({ equipmentIssue, success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal error", success: false });
-  }
-});
-
-router.get("/staff", validateAuth, async (req, res) => {
-  const staffIssueService = new StaffIssueService({
-    StaffIssue,
-  });
-
-  try {
-    const staffIssues = await staffIssueService.getStaffIssues();
-
-    res.status(200).json({ staffIssues, success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal error", success: false });
-  }
-});
-
-router.post("/staff", validateAuth, async (req, res) => {
-  let { resource, description } = req.body;
-
-  try {
-    const staffIssueService = new StaffIssueService({
-      StaffIssue,
-    });
-    const staffIssue = await staffIssueService.createStaffIssue({
-      resource,
-      description,
-      createdBy: req.token._id,
-    });
-
-    if (!staffIssue) {
-      return res
-        .status(400)
-        .json({ message: "Staff is not available", success: false });
-    }
-
-    res.status(200).json({ staffIssue, success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal error", success: false });
