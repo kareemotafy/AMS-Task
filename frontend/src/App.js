@@ -26,7 +26,7 @@ const CookiefullComponent = (component) => {
 
   useEffect(() => {
     const verifyCookie = async () => {
-      if (!cookie) {
+      if (!cookie && window.location.pathname !== "/register") {
         navigate("/sign-in");
       }
     };

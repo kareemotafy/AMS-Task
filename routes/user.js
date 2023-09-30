@@ -43,8 +43,6 @@ router.get("/all", validateAuth, async (req, res) => {
 router.patch("/:id", validateAuth, async (req, res) => {
   const { firstName, lastName } = req.body;
 
-  console.log(req.params.id);
-
   try {
     const userService = new UserService({ User });
     const user = await userService.updateUser({

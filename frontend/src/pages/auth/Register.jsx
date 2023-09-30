@@ -38,7 +38,7 @@ const Register = () => {
           height: "100vh",
         }}
       >
-        <Grid item md={6} xs={10}>
+        <Grid item md={4} xs={10}>
           <Card style={{ padding: 30 }}>
             <h1>Welcome!</h1>
             <p style={{ marginBottom: 20 }}>

@@ -250,7 +250,7 @@ const StaffRequests = () => {
                       </Grid>
 
                       <Grid item xs={6}>
-                        <h4>Resource: </h4>
+                        <h4>Staff Member: </h4>
                         <p>{resource.fullName}</p>
 
                         <h4 style={{ marginTop: 10 }}>Due:</h4>

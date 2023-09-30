@@ -258,7 +258,7 @@ const EquipmentRequests = () => {
                       </Grid>
 
                       <Grid item xs={6}>
-                        <h4>Staff Member: </h4>
+                        <h4>Resource: </h4>
                         <p>{resource.title}</p>
 
                         <h4 style={{ marginTop: 10 }}>Due:</h4>
